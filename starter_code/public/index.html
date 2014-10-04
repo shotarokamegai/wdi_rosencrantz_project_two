@@ -1,0 +1,49 @@
+<html>
+<head>
+	<title>Contact List</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="./stylesheets/styles.css">
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone.js"></script>
+</head>
+<body>
+	<header>
+	<h1>Contact List</h1>
+		<lable class="contact">
+			<h2>Create Contact</h2>
+			<input type="text" name="name" placeholder="Name">
+			<input type="text" name="age" placeholder="Age">
+			<input type="text" name="address" placeholder="Address">
+			<input type="text" name= "number" placeholder="Phone Number">
+			<button class="create_contact">Create</button>
+		</lable>
+		<lable class="category">
+			<h2>Create Categories</h2>
+			<input type="text" id="name" placeholder="Name">
+			<button class="create_category">Create</button>
+		</lable>
+	</header>
+	<ul>
+	</ul>
+	 <script id="categories" type="text/template">
+  		<h3 class="category"><%= name %></h3>
+	</script>
+	<script id="contacts" type="text/template">
+  		<h3 class="contact"><%= name %></h3>
+	</script>
+	<script id="contact" type="text/template">
+  		<h3 class="contact_detail"><%= name %></h3>
+  		<h3 class="contact_detail"><%= age %></h3>
+  		<h3 class="contact_detail"><%= address %></h3>
+  		<h3 class="contact_detail"><%= phone_number %></h3>
+	</script>
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="./javascripts/scripts.js"></script>
+</body>
+</html>
