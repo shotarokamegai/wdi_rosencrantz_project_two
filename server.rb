@@ -53,7 +53,6 @@ end
 
 post("/contacts") do
   contact = Contact.create(contact_params(params))
-  binding.pry
   contact.to_json
 end
 
