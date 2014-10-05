@@ -14,14 +14,14 @@
 </head>
 <body>
 	<header>
-	<h1>Contact List</h1>
+	<h1><a href="/index.html">Contact List</a></h1>
 		<lable class="contact">
 			<h2>Create Contact</h2>
-			<input type="text" name="name" placeholder="Name">
-			<input type="text" name="age" placeholder="Age">
-			<input type="text" name="address" placeholder="Address">
-			<input type="text" name= "number" placeholder="Phone Number">
-			<input type="text" name= "category" placeholder="Category">
+			<input type="text" name="name" placeholder="Name" id="name">
+			<input type="text" name="age" placeholder="Age" id="age">
+			<input type="text" name="address" placeholder="Address" id="address">
+			<input type="text" name= "number" placeholder="Phone Number" id="number">
+			<input type="text" name= "category" placeholder="Category" id="category">
 			<!-- <div class="dropdown">
   				<a data-toggle="dropdown" href="#">Category</a>
   					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
@@ -37,23 +37,34 @@
 	</header>
 	<ul>
 	</ul>
+	<a href="/index.html">Home</a>
 	 <script id="categories" type="text/template">
   		<h3 class="category"><%= name %></h3>
 	</script>
 	<script id="contacts" type="text/template">
-  		<h3 class="contact_detail"><%= name %></h3>
+  		<li><h3 class="contact_detail"><%= name %></h3><button type="button" class="btn btn-primary delete" data-toggle="button">Delete</button>
+  		</li>
 	</script>
 	<script id="contact" type="text/template">
+		<ul>
+    		<li><img src="<%= picture %>"></li>
+		  	<li><h4 class="contact_name">Name: <%= name %></h4></li>
+		  	<li><h4 class="contact_age">Age: <%= age %></h4></li>
+		  	<li><h4 class="contact_address">Address: <%= address %></h4></li>
+		  	<li><h4 class="contact_number">Phone: <%= phone_number %></h4></li>
+		</ul>
 		<!-- Large modal -->
-		<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg"><%= name %></button>
+		<h4 data-toggle="modal" data-target=".bs-example-modal-lg">Edit</h4>
 			<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   			<div class="modal-dialog modal-lg">
     		<div class="modal-content">
     			<ul>
-		  			<li><h4 class="contact_name"><%= name %></h4></li>
-		  			<li><h4 class="contact_age"><%= age %></h4></li>
-		  			<li><h4 class="contact_address"><%= address %></h4></li>
-		  			<li><h4 class="contact_number"><%= phone_number %></h4></li>
+    				<li><input name="contact_picture" placeholder="Image URL: <%= picture %>"></input></li>
+		  			<li><input name="contact_name" placeholder="Name: <%= name %>"></input></li>
+		  			<li><input name="contact_age" placeholder="Age: <%= age %>"></input></li>
+		  			<li><input name="contact_address" placeholder="Address: <%= address %>"></input></li>
+		  			<li><input name="contact_number" placeholder="Phone: <%= phone_number %>"></input></li>
+		  			<button type="button" class="btn btn-primary edit" data-toggle="button">Edit</button>
 		  		</ul>
     		</div>
   			</div>
