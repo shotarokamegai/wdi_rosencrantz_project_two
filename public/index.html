@@ -21,12 +21,10 @@
 			<input type="text" name="age" placeholder="Age" id="age">
 			<input type="text" name="address" placeholder="Address" id="address">
 			<input type="text" name= "number" placeholder="Phone Number" id="number">
-			<input type="text" name= "category" placeholder="Category" id="category">
-			<!-- <div class="dropdown">
-  				<a data-toggle="dropdown" href="#">Category</a>
-  					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-  					</ul>
-			</div> -->
+			<!-- <input type="text" name= "category" placeholder="Category" id="category"> -->
+			<select class="form-control" name="category" id="category" width="150" style="width: 150px">
+  				
+			</select>
 			<button class="create_contact">Create</button>
 		</lable>
 		<lable class="category">
@@ -34,11 +32,18 @@
 			<input type="text" name="name" placeholder="Name">
 			<button class="create_category">Create</button>
 		</lable>
+		<lable class="search">
+			<h2>Search Contacts</h2>
+			<input type="text" name="name" placeholder="Name">
+			<button class="search_category">Search</button>
+		</lable>
 	</header>
-	<ul>
-	</ul>
+	<ul></ul>
 	<a href="/index.html">Home</a>
-	 <script id="categories" type="text/template">
+	<script id="category_dropbox" type="text/template">
+  		<option class="category"><%= name %></option>
+	</script>
+	<script id="categories" type="text/template">
   		<h3 class="category"><%= name %></h3>
 	</script>
 	<script id="contacts" type="text/template">
@@ -47,7 +52,7 @@
 	</script>
 	<script id="contact" type="text/template">
 		<ul>
-    		<li><img src="<%= picture %>"></li>
+    		<li><img src="<%= picture %>" class="img-thumbnail"></li>
 		  	<li><h4 class="contact_name">Name: <%= name %></h4></li>
 		  	<li><h4 class="contact_age">Age: <%= age %></h4></li>
 		  	<li><h4 class="contact_address">Address: <%= address %></h4></li>

@@ -1,8 +1,16 @@
 body {
-	cursor: pointer;
-	text-decoration: none;
+	text-align: center;
 }
 
 li {
 	list-style: none;
+}
+
+select#category {
+	width: 150px;
+	display: inline;
+}
+
+a {
+	text-decoration: none;
 }

@@ -25,11 +25,11 @@ end
 
 post("/categories") do
   category = Category.create(category_params(params))
-
   category.to_json
 end
 
 put("/categories/:id") do
+  binding.pry
   category = Category.find_by(id: params[:id])
   category.update(category_params(params))
 

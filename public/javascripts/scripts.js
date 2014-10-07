@@ -14,7 +14,7 @@ var CategoryView = Backbone.View.extend({
 	initialize: function(){
     	// this.listenTo(this.model, "change", this.render);
     	// this.listenTo(this.model, "destroy remove", this.remove);
-    	categoryCollection.fetch();
+    	// categoryCollection.fetch();
   	},
 
   	defaults: {
@@ -48,8 +48,6 @@ var CategoryModel = Backbone.Model.extend({
   	urlRoot: "/categories"
 });
 
-categoryModel = new CategoryModel();
-
 // *Category Collection*
 
 var CategoryCollection = Backbone.Collection.extend({
@@ -61,7 +59,7 @@ categoryCollection = new CategoryCollection();
 
 var CategoriesView = Backbone.View.extend({
 	initialize: function() {
-		categoryCollection.fetch({success: function(e){  // display models in collection
+		categoryCollection.fetch({success: function(e){  // display models
 			for(var i=0;i<categoryCollection.models.length;i++){
 				var view = new CategoryView({model: categoryCollection.models[i]});
 				view.render();
@@ -71,8 +69,6 @@ var CategoriesView = Backbone.View.extend({
 		console.log(categoryCollection);
 	}
 });
-
-var CategoryList = new CategoriesView({ collection: categoryCollection, el: $("ul") }); // this line is for rendering a category list
 
 // *Category View*
 
@@ -93,13 +89,24 @@ $('button.create_category').click(function(){
   	var label   = this.parentElement;
   	var name    = $(label).find('input[name="name"]').val();
   	$.ajax({url: "/categories", type: 'POST', data: { name: name }, success: function(e){
-  		var view = new CategoryView({model: e}); // ready to render model got from server
-		view.render(); // render the added model
+  		categoryCollection.create(e); // ready to render model got from server
+		// view.render(); // render the added model
+		var CategoryList = new CategoriesView({ collection: categoryCollection, el: $("ul") }); // this line is for rendering a category list
   	}});
   	// contactCollection.create({ name: name, age: age, address: address, number: number });
    	console.log('created');
    	$('lable.category input').val('');
+   	$.ajax({url: "/categories", dataType: 'json', success: function(data){
+	data.forEach(function(item){
+		var option = document.createElement('option');
+		var name = item.name;
+		option.text = name;
+		$('select').append(option);
+	})
+}});	
 });
+
+var CategoryList = new CategoriesView({ collection: categoryCollection, el: $("ul") }); // this line is for rendering a category list
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -118,14 +125,15 @@ var ContactView = Backbone.View.extend({
         "click h3.contact": "rendercontacts",
         "click h3.contact_detail": "rendercontact",
         "click button.edit": "update",
-        "click button.delete": "destroy"
+        "click button.delete": "destroy",
+        "click button.search_contact": "search"
     },
 
 	initialize: function(){
-		console.log(this.model)
+		// console.log(this.model)
     	// this.listenTo(this.model, "change", this.render); // this line is not working
     	// this.listenTo(this.models, "destroy remove", this.remove);// this line is not working
-    	contactCollection.fetch();
+    	// contactCollection.fetch();
   	},
 
   	defaults: { // set defaults
@@ -166,11 +174,13 @@ var ContactView = Backbone.View.extend({
 
 	destroy: function() {
     	this.model.destroy();
-    	this.model.remove();
+    	this.remove();
+    	console.log('Destroyeddd');
   	},
 
-  	update: function(e) {
+  	update: function() {
   		console.log(this.model)
+  		debugger
   		this.model.set('picture', this.$el.find('div.modal-content ul input[name="contact_picture"]').val());
     	this.model.set('name', this.$el.find('div.modal-content ul input[name="contact_name"]').val());
     	this.model.set('age', this.$el.find('div.modal-content ul input[name="contact_age"]').val());
@@ -178,6 +188,10 @@ var ContactView = Backbone.View.extend({
 		this.model.set('phone_number', this.$el.find('div.modal-content ul input[name="contact_number"]').val());
     	this.model.save();
     	this.model.render();
+  	},
+
+  	search: function(){
+  		console.log("searchhh");
   	}
 });
 
@@ -186,8 +200,6 @@ var ContactView = Backbone.View.extend({
 var ContactModel = Backbone.Model.extend({
   	urlRoot: "/contacts"
 });
-
-contactModel = new ContactModel();
 
 // *Contact Collection*
 
@@ -210,7 +222,6 @@ var ContactFormView = Backbone.View.extend({
   	},
 
   	create: function() {
-  		    	    	debugger
   		console.log('clicked!');
     	var name = this.$el.find('input[name="name"]').val();
     	var age = this.$el.find('input[name="age"]').val();
@@ -220,27 +231,35 @@ var ContactFormView = Backbone.View.extend({
   	}
 });
 
-var formView = new ContactFormView({ el: $(".form"), collection: contactCollection })
-
 $('button.create_contact').click(function(){
   	console.log('clicked!');
-  	var label   = this.parentElement;
-  	var name    = $(label).find('input[name="name"]').val();
-  	var age     = $(label).find('input[name="age"]').val();
-  	var address = $(label).find('input[name="address"]').val();
-  	var number  = $(label).find('input[name="number"]').val();
-  	var category_name  = $(label).find('input[name="category"]').val();
+  	if ($('lable').find('input[name="name"]').val() == "" || $('lable').find('input[name="age"]').val() == "" || $('lable').find('input[name="address"]').val() == "" || $('lable').find('input[name="number"]').val() == ""){
+  		$('h3').remove();
+		var h3 = document.createElement('h3');
+		$(h3).attr('class', 'invalid_message');
+		var innards = "Invalid input information.";
+		$(h3).html(innards);
+		$('ul').append(h3);
+  	} else {
+	  	var label   = this.parentElement;
+	  	var name    = $('lable').find('input[name="name"]').val();
+	  	var age     = $('lable').find('input[name="age"]').val();
+	  	var address = $('lable').find('input[name="address"]').val();
+	  	var number  = $('lable').find('input[name="number"]').val();
+	  	var category_name  = $('select#category').val();
 
-  	$.ajax({url: 'http://api.randomuser.me/', dataType: 'json', success: function(data){
-    	var picture = data.results[0].user.picture.medium;
-    	categoryCollection.fetch({success: function(e){
-   			var id = e.where({name: category_name})[0].id; // get id from category name
-	 		$.ajax({url: "/contacts", type: 'POST', data: { name: name, age: age, address: address, phone_number: number, picture: picture, category_id: id}, success: function(e){
-	  			var view = new ContactView({model: e});
-  			}});
-  		}});
-  	}
-	});
+		  	$.ajax({url: 'http://api.randomuser.me/', dataType: 'json', success: function(data){
+		    	var picture = data.results[0].user.picture.medium;
+		    	categoryCollection.fetch({success: function(e){
+		   			var id = e.where({name: category_name})[0].id; // get id from category name
+			 		$.ajax({url: "/contacts", type: 'POST', data: { name: name, age: age, address: address, phone_number: number, picture: picture, category_id: id}, success: function(e){
+			 			this.contactCollection.create(e);
+		  			}});
+		  			var formView = new ContactFormView({ el: $(".form"), collection: contactCollection });
+		  		}});
+		  	}
+			});
+	};
 
 // contactCollection.create({ name: name, age: age, address: address, number: number });
    	console.log('created');
@@ -251,9 +270,67 @@ $('button.create_contact').click(function(){
    	$('lable.contact input#category').val('');
 });
 
+var formView = new ContactFormView({ el: $(".form"), collection: contactCollection });
+
 //////////////////////////////////////////////////////
 
+// *Category Dropbox*
 
+// var CategoryView = Backbone.View.extend({
 
+// 	tagName: "option",
+
+// 	dropboxTemplate: _.template( $("#category_dropbox").html() ),
+
+// 	initialize: function(){
+//     	// this.listenTo(this.model, "change", this.render);
+//     	// this.listenTo(this.model, "destroy remove", this.remove);
+//     	categoryCollection.fetch();
+//   	},
+
+//   	defaults: {
+// 		name: ""
+// 	},
+
+//   	render: function(){
+// 		var option = this.$el.html(this.dropboxTemplate(this.model.attributes));
+// 		$('select').append(option);
+// 	}
+// });
+
+// create dropbox
+
+$.ajax({url: "/categories", dataType: 'json', success: function(data){
+	data.forEach(function(item){
+		var option = document.createElement('option');
+		var name = item.name;
+		option.text = name;
+		$('select').append(option);
+	})
+}});									
+
+// search contact
+
+$('button.search_contact').click(function(){
+	$('li').remove();
+	var name = $('lable.search input')[0].value;
+	contactCollection.fetch({success: function(data){
+		var data = data.models;
+		_.each(data, function(item){
+			if(item.attributes.name == name){
+				var li = document.createElement('li');
+				var innards = $("<h3 class='contact_detail'>" + item.attributes.name + "</h3><button type='button' class='btn btn-primary delete' data-toggle='button'>Delete</button>");
+				$('li').html(innards);
+				$('ul').append(li);
+			}
+		})
+		$('h3').remove();
+		var h3 = document.createElement('h3');
+		$(h3).attr('class', 'invalid_message');
+		var innards = "Sorry, we couldn't find any results for this search.";
+		$(h3).html(innards);
+		$('ul').append(h3);									
+	}});
+});
 
 
